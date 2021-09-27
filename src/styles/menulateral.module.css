@@ -1,0 +1,10 @@
+.teste {
+    margin: 5px;
+    border-radius: 10px;
+    background-color: gray;
+    transition: 1s
+}   
+
+.teste:hover {
+    border-radius: 50%;
+}
