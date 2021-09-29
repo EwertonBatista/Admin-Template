@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AuthInput from "../components/auth/Authinput";
+import {IconeWarning} from "../components/icons/index"
+import { TesteContext } from "../data/context/TesteContext";
+
 
 export default function Autenticacao(){
 
+    const   {user}   = useContext(TesteContext)
+
+
+    const [erro, setErro] = useState(null)
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [modo, setModo] = useState<'login' | 'cadastro'>('login')
@@ -10,10 +17,24 @@ export default function Autenticacao(){
     function submeter(){
         modo === 'login' ? alert('login') : alert('cadastrar')
     }
+
+    function exibirErro(msg: any, tempo = 5){
+        setErro(msg)
+
+        setTimeout(()=>{
+                setErro(null)
+        }, tempo * 1000)
+        
+    }
     
 
     return (
-        <div className={`flex h-screen items-center justify-center`}>        
+        <div className={`flex h-screen items-center justify-center`}>  
+            <h1 className={`${user.cor} ${user.tamanho}`}>
+                {user.name}
+            </h1>
+        <button onClick={() => { exibirErro('Fudeu, rakiaro tua conta, liga pa polisa', 3) }}>Clica pra nos testa</button>
+
             <div className={`hidden md:block md:w-1/2 lg:w-2/3`}>
                 <img src="https://source.unsplash.com/random" alt="" className={`h-screen w-full object-cover`}/>
             </div>
@@ -21,6 +42,17 @@ export default function Autenticacao(){
                 <h1 className={`text-3xl font-bold mb-5`}>
                     {modo === 'login' ? 'Entre com a sua conta' : 'Cadastre-se na plataforma'}
                 </h1>
+            
+                {erro ? (
+                    <div className={`flex items-center text-center bg-red-400 text-white py-3 px-5 rounded-lg border-2 border-red-700`}>
+                        {IconeWarning()}
+                        <p>{erro}</p>
+                    </div>
+
+                ) : false}
+
+           
+
                 <AuthInput obrigatorio label="Email" tipo="email" valor={email} valorMudou={setEmail}/>
                 <AuthInput obrigatorio label="Senha" tipo="password" valor={senha} valorMudou={setSenha}/>
 
