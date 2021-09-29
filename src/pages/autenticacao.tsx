@@ -1,12 +1,16 @@
 import { useContext, useState } from "react";
 import AuthInput from "../components/auth/Authinput";
 import {IconeWarning} from "../components/icons/index"
-import { TesteContext } from "../data/context/TesteContext";
+import  {useAuth}  from "../data/hook/useAuth";
+
+// Hook personalizado criado para simplificar o uso do useContext
 
 
+ 
 export default function Autenticacao(){
 
-    const   {user}   = useContext(TesteContext)
+    const {login, cadastrar ,loginGoogle } = useAuth();
+
 
 
     const [erro, setErro] = useState(null)
@@ -14,8 +18,12 @@ export default function Autenticacao(){
     const [senha, setSenha] = useState('')
     const [modo, setModo] = useState<'login' | 'cadastro'>('login')
 
-    function submeter(){
-        modo === 'login' ? alert('login') : alert('cadastrar')
+    async function submeter(){
+        try {
+            modo === 'login' ? await login(email, senha) : await cadastrar(email, senha)
+        } catch(e){
+            exibirErro(e?.message ?? 'Erro desconhecido')
+        }
     }
 
     function exibirErro(msg: any, tempo = 5){
@@ -30,10 +38,9 @@ export default function Autenticacao(){
 
     return (
         <div className={`flex h-screen items-center justify-center`}>  
-            <h1 className={`${user.cor} ${user.tamanho}`}>
-                {user.name}
-            </h1>
-        <button onClick={() => { exibirErro('Fudeu, rakiaro tua conta, liga pa polisa', 3) }}>Clica pra nos testa</button>
+
+
+        {/* <button onClick={() => { exibirErro('Ei boy, rakiaro tua conta, liga pa polisa', 3) }}>Clica pra nos testa</button> */}
 
             <div className={`hidden md:block md:w-1/2 lg:w-2/3`}>
                 <img src="https://source.unsplash.com/random" alt="" className={`h-screen w-full object-cover`}/>
@@ -62,7 +69,7 @@ export default function Autenticacao(){
 
                 <hr className={`my-6 border-gray-600 w-full`} />
 
-                <button onClick={submeter} className={`w-full bg-red-500 hover:bg-red-400 text-white rounded-lg px-4 py-3`}>
+                <button onClick={loginGoogle} className={`w-full bg-red-500 hover:bg-red-400 text-white rounded-lg px-4 py-3`}>
                     Entrar com o Google
                 </button>
 

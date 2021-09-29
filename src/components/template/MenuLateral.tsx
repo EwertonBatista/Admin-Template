@@ -1,3 +1,4 @@
+import { useAuth } from '../../data/context/AuthContext'
 import useAppData from '../../data/hook/useAppData'
 import { IconeCasa, IconeAjustes, IconeSino, IconeLogout, IconeDark, IconeLight } from '../icons'
 import Logo from './Logo'
@@ -5,7 +6,10 @@ import MenuItem from './MenuItem'
 
 
 export default function MenuLateral(){
+
     const dados = useAppData()
+    const {logout} = useAuth()
+
     return (
         <aside className={`flex flex-col 
         bg-gray-200 text-gray-700        
@@ -30,7 +34,7 @@ export default function MenuLateral(){
                 hover:text-white
                 dark:text-red-400
                 dark:hover:bg-gray-800
-                `} onClick={() => confirm('Deseja sair?')} texto="Home" icone={IconeLogout}/>
+                `} onClick={logout} texto="Home" icone={IconeLogout}/>
             </ul>
             
         
